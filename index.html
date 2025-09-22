@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantation Data Entry</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Form container */
+    .form-container {
+      max-width: 700px;
+      margin: 30px auto;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #a8ff60;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4caf50;
+      box-shadow: 0 0 6px rgba(76, 175, 80, 0.6);
+    }
+
+    .submit-btn, .download-btn {
+      display: block;
+      width: 100%;
+      background: #4caf50;
+      color: #fff;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .submit-btn:hover, .download-btn:hover {
+      background: #388e3c;
+    }
+
+    /* Table styling */
+    .table-container {
+      max-width: 95%;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .search-box {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .search-box input {
+      width: 60%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      color: #fff;
+    }
+
+    th {
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .delete-btn {
+      background: #e53935;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .delete-btn:hover {
+      background: #b71c1c;
+    }
+
+    .summary-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      text-align: center;
+      color: #a8ff60;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Plantation Data Entry</h1>
+
+    <form id="plantationForm">
+      <!-- Range Dropdown -->
+      <div class="form-group">
+        <label for="range">Range</label>
+        <select id="range" name="range" required>
+          <option value="">-- Select Range --</option>
+          <option value="north">North Range</option>
+          <option value="south">South Range</option>
+          <option value="east">East Range</option>
+          <option value="west">West Range</option>
+        </select>
+      </div>
+
+      <!-- Scheme Dropdown -->
+      <div class="form-group">
+        <label for="scheme">Scheme</label>
+        <select id="scheme" name="scheme" required>
+          <option value="">-- Select Scheme --</option>
+          <option value="afforestation">Afforestation</option>
+          <option value="reforestation">Reforestation</option>
+          <option value="social-forestry">Social Forestry</option>
+          <option value="eco-restoration">Eco Restoration</option>
+        </select>
+      </div>
+
+      <!-- Model Dropdown -->
+      <div class="form-group">
+        <label for="model">Model</label>
+        <select id="model" name="model" required>
+          <option value="">-- Select Model --</option>
+          <option value="agroforestry">Agroforestry</option>
+          <option value="mixed">Mixed Plantation</option>
+          <option value="block">Block Plantation</option>
+          <option value="strip">Strip Plantation</option>
+        </select>
+      </div>
+
+      <!-- Place -->
+      <div class="form-group">
+        <label for="place">Place</label>
+        <input type="text" id="place" name="place" placeholder="Enter place name" required>
+      </div>
+
+      <!-- Plantation Area -->
+      <div class="form-group">
+        <label for="area">Plantation Area (Ha)</label>
+        <input type="number" id="area" name="area" step="0.01" placeholder="Enter area in hectares" required>
+      </div>
+
+      <!-- Plants Planted -->
+      <div class="form-group">
+        <label for="plants">Plants Planted</label>
+        <input type="number" id="plants" name="plants" placeholder="Enter number of plants" required>
+      </div>
+
+      <!-- GPS Coordinates -->
+      <div class="form-group">
+        <label for="gps">GPS Coordinates</label>
+        <input type="text" id="gps" name="gps" placeholder="e.g. 22.3072° N, 73.1812° E" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn">Submit Data</button>
+    </form>
+  </div>
+
+  <!-- Table to display submitted data -->
+  <div class="table-container">
+    <h2 style="text-align:center; color:#a8ff60;">Submitted Plantation Records</h2>
+
+    <!-- Search Box -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search records...">
+    </div>
+
+    <table id="recordsTable">
+      <thead>
+        <tr>
+          <th>Range</th>
+          <th>Scheme</th>
+          <th>Model</th>
+          <th>Place</th>
+          <th>Area (Ha)</th>
+          <th>Plants Planted</th>
+          <th>GPS Coordinates</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <button class="download-btn" onclick="downloadCSV()">Download CSV</button>
+
+    <!-- Summary Section -->
+    <div class="summary-box" id="summaryBox">
+      Total Area: 0 Ha | Total Plants: 0
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('plantationForm');
+    const tableBody = document.querySelector('#recordsTable tbody');
+    const searchInput = document.getElementById('searchInput');
+    const summaryBox = document.getElementById('summaryBox');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Collect form data
+      const range = document.getElementById('range').value;
+      const scheme = document.getElementById('scheme').value;
+      const model = document.getElementById('model').value;
+      const place = document.getElementById('place').value;
+      const area = parseFloat(document.getElementById('area').value);
+      const plants = parseInt(document.getElementById('plants').value);
+      const gps = document.getElementById('gps').value;
+
+      // Create new row
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${range}</td>
+        <td>${scheme}</td>
+        <td>${model}</td>
+        <td>${place}</td>
+        <td>${area}</td>
+        <td>${plants}</td>
+        <td>${gps}</td>
+        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+      `;
+
+      tableBody.appendChild(newRow);
+
+      // Update summary
+      updateSummary();
+
+      // Reset form
+      form.reset();
+    });
+
+    function deleteRow(button) {
+      const row = button.parentElement.parentElement;
+      row.remove();
+      updateSummary();
+    }
+
+    function updateSummary() {
+      let totalArea = 0;
+      let totalPlants = 0;
+      const rows = tableBody.querySelectorAll("tr");
+      rows.forEach(row => {
+        if (row.style.display !== "none") { // only visible rows
+          const cells = row.querySelectorAll("td");
+          const area = parseFloat(cells[4].innerText) || 0;
+          const plants = parseInt(cells[5].innerText) || 0;
+          totalArea += area;
+          totalPlants += plants;
+        }
+      });
+      summaryBox.textContent = `Total Area: ${totalArea.toFixed(2)} Ha | Total Plants: ${totalPlants}`;
+    }
+
+    function downloadCSV() {
+      let csv = [];
+      const rows = document.querySelectorAll("table tr");
+      for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll("td, th");
+        for (let j = 0; j < cols.length - 1; j++) { // exclude Action column
+          row.push(cols[j].innerText);
+        }
+        csv.push(row.join(","));
+      }
+
+      // Create CSV file and trigger download
+      const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+      const downloadLink = document.createElement("a");
+      downloadLink.download = "plantation_records.csv";
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+    }
+
+    // Search filter
+    searchInput.addEventListener("keyup", function() {
+      const filter = searchInput.value.toLowerCase();
+      const rows = tableBody.getElementsByTagName("tr");
+      Array.from(rows).forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+      });
+      updateSummary();
+    });
+  </script>
+</body>
+</html>
