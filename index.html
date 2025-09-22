@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantation Data Entry</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h1>Plantation Data Entry</h1>
+
+    <form id="plantationForm">
+      <!-- Range Dropdown -->
+      <div class="form-group">
+        <label for="range">Range</label>
+        <select id="range" name="range" required>
+          <option value="">-- Select Range --</option>
+          <option value="Lunawada">Lunawada</option>
+          <option value="Khanpur">Khanpur</option>
+          <option value="Balasinor">Balasinor</option>
+          <option value="Santrampur (East)">Santrampur (East)</option>
+          <option value="Santrampur (West)">Santrampur (West)</option>
+          <option value="Munpur">Munpur</option>
+          <option value="Ditwas">Ditwas</option>
+        </select>
+      </div>
+
+      <!-- Scheme Dropdown -->
+      <div class="form-group">
+        <label for="scheme">Scheme</label>
+        <select id="scheme" name="scheme" required>
+          <option value="">-- Select Scheme --</option>
+          <option value="Forest Mgmt & Dev (NT)">Forest Mgmt & Dev (NT)</option>
+          <option value="Forest Mgmt & Dev (T)">Forest Mgmt & Dev (T)</option>
+          <option value="PERG">PERG</option>
+          <option value="CAMPA">CAMPA</option>
+        </select>
+      </div>
+
+      <!-- Model Dropdown -->
+      <div class="form-group">
+        <label for="model">Model</label>
+        <select id="model" name="model" required>
+          <option value="">-- Select Model --</option>
+          <option value="Afforestation in degraded forest">Afforestation in degraded forest</option>
+          <option value="Aided artifical regeneration of forest land">Aided artifical regeneration of forest land</option>
+          <option value="Bamboo Plantation">Bamboo Plantation</option>
+          <option value="Commercial Planting of Timber Species">Commercial Planting of Timber Species</option>
+          <option value="Eco Restoration Barren">Eco Restoration Barren</option>
+          <option value="Eco restoration under GATI SHAKTI">Eco restoration under GATI SHAKTI</option>
+          <option value="Irrigated Plantation">Irrigated Plantation</option>
+          <option value="Plantation of enddangered species">Plantation of enddangered species</option>
+          <option value="Plantation of sandalwood in forest area">Plantation of sandalwood in forest area</option>
+          <option value="Protection and Devlopment of Sacred groves in forest">Protection and Devlopment of Sacred groves in forest</option>
+          <option value="Restoration of Degraded Forests">Restoration of Degraded Forests</option>
+          <option value="Model-3">Model-3</option>
+        </select>
+      </div>
+
+      <!-- Place -->
+      <div class="form-group">
+        <label for="place">Place</label>
+        <input type="text" id="place" name="place" placeholder="Enter place name" required>
+      </div>
+
+      <!-- Plantation Area -->
+      <div class="form-group">
+        <label for="area">Plantation Area (Ha)</label>
+        <input type="number" id="area" name="area" step="0.01" placeholder="Enter area in hectares" required>
+      </div>
+
+      <!-- Plants Planted -->
+      <div class="form-group">
+        <label for="plants">Plants Planted</label>
+        <input type="number" id="plants" name="plants" placeholder="Enter number of plants" required>
+      </div>
+
+      <!-- GPS Coordinates -->
+      <div class="form-group">
+        <label for="gps">GPS Coordinates</label>
+        <input type="text" id="gps" name="gps" placeholder="e.g. 22.3072° N, 73.1812° E" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn">Submit Data</button>
+    </form>
+  </div>
+
+  <!-- Table to display submitted data -->
+  <div class="table-container">
+    <h2 style="text-align:center; color:#a8ff60;">Submitted Plantation Records</h2>
+
+    <!-- Search Box -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search records...">
+    </div>
+
+    <table id="recordsTable">
+      <thead>
+        <tr>
+          <th>Range</th>
+          <th>Scheme</th>
+          <th>Model</th>
+          <th>Place</th>
+          <th>Area (Ha)</th>
+          <th>Plants Planted</th>
+          <th>GPS Coordinates</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <button class="download-btn" onclick="downloadCSV()">Download CSV</button>
+
+    <!-- Summary Section -->
+    <div class="summary-box" id="summaryBox">
+      Total Area: 0 Ha | Total Plants: 0
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('plantationForm');
+    const tableBody = document.querySelector('#recordsTable tbody');
+    const searchInput = document.getElementById('searchInput');
+    const summaryBox = document.getElementById('summaryBox');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Collect form data
+      const range = document.getElementById('range').value;
+      const scheme = document.getElementById('scheme').value;
+      const model = document.getElementById('model').value;
+      const place = document.getElementById('place').value;
+      const area = parseFloat(document.getElementById('area').value);
+      const plants = parseInt(document.getElementById('plants').value);
+      const gps = document.getElementById('gps').value;
+
+      // Create new row
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${range}</td>
+        <td>${scheme}</td>
+        <td>${model}</td>
+        <td>${place}</td>
+        <td>${area}</td>
+        <td>${plants}</td>
+        <td>${gps}</td>
+        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+      `;
+
+      tableBody.appendChild(newRow);
+
+      // Update summary
+      updateSummary();
+
+      // Reset form
+      form.reset();
+    });
+
+    function deleteRow(button) {
+      const row = button.parentElement.parentElement;
+      row.remove();
+      updateSummary();
+    }
+
+    function updateSummary() {
+      let totalArea = 0;
+      let totalPlants = 0;
+      const rows = tableBody.querySelectorAll("tr");
+      rows.forEach(row => {
+        if (row.style.display !== "none") {
+          const cells = row.querySelectorAll("td");
+          const area = parseFloat(cells[4].innerText) || 0;
+          const plants = parseInt(cells[5].innerText) || 0;
+          totalArea += area;
+          totalPlants += plants;
+        }
+      });
+      summaryBox.textContent = `Total Area: ${totalArea.toFixed(2)} Ha | Total Plants: ${totalPlants}`;
+    }
+
+    function downloadCSV() {
+      let csv = [];
+      const rows = document.querySelectorAll("table tr");
+      for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll("td, th");
+        for (let j = 0; j < cols.length - 1; j++) {
+          row.push(cols[j].innerText);
+        }
+        csv.push(row.join(","));
+      }
+
+      // Create CSV file and trigger download
+      const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+      const downloadLink = document.createElement("a");
+      downloadLink.download = "plantation_records.csv";
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+    }
+
+    // Search filter
+    searchInput.addEventListener("keyup", function() {
+      const filter = searchInput.value.toLowerCase();
+      const rows = tableBody.getElementsByTagName("tr");
+      Array.from(rows).forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+      });
+      updateSummary();
+    });
+  </script>
+</body>
+</html>
