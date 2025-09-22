@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantation Data Entry</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Form container */
+    .form-container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #a8ff60;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4caf50;
+      box-shadow: 0 0 6px rgba(76, 175, 80, 0.6);
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      background: #4caf50;
+      color: #fff;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .submit-btn:hover {
+      background: #388e3c;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Plantation Data Entry</h1>
+
+    <form>
+      <!-- Range Dropdown -->
+      <div class="form-group">
+        <label for="range">Range</label>
+        <select id="range" name="range" required>
+          <option value="">-- Select Range --</option>
+          <option value="north">North Range</option>
+          <option value="south">South Range</option>
+          <option value="east">East Range</option>
+          <option value="west">West Range</option>
+        </select>
+      </div>
+
+      <!-- Scheme Dropdown -->
+      <div class="form-group">
+        <label for="scheme">Scheme</label>
+        <select id="scheme" name="scheme" required>
+          <option value="">-- Select Scheme --</option>
+          <option value="afforestation">Afforestation</option>
+          <option value="reforestation">Reforestation</option>
+          <option value="social-forestry">Social Forestry</option>
+          <option value="eco-restoration">Eco Restoration</option>
+        </select>
+      </div>
+
+      <!-- Model Dropdown -->
+      <div class="form-group">
+        <label for="model">Model</label>
+        <select id="model" name="model" required>
+          <option value="">-- Select Model --</option>
+          <option value="agroforestry">Agroforestry</option>
+          <option value="mixed">Mixed Plantation</option>
+          <option value="block">Block Plantation</option>
+          <option value="strip">Strip Plantation</option>
+        </select>
+      </div>
+
+      <!-- Place -->
+      <div class="form-group">
+        <label for="place">Place</label>
+        <input type="text" id="place" name="place" placeholder="Enter place name" required>
+      </div>
+
+      <!-- Plantation Area -->
+      <div class="form-group">
+        <label for="area">Plantation Area (Ha)</label>
+        <input type="number" id="area" name="area" step="0.01" placeholder="Enter area in hectares" required>
+      </div>
+
+      <!-- Plants Planted -->
+      <div class="form-group">
+        <label for="plants">Plants Planted</label>
+        <input type="number" id="plants" name="plants" placeholder="Enter number of plants" required>
+      </div>
+
+      <!-- GPS Coordinates -->
+      <div class="form-group">
+        <label for="gps">GPS Coordinates</label>
+        <input type="text" id="gps" name="gps" placeholder="e.g. 22.3072° N, 73.1812° E" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn">Submit Data</button>
+    </form>
+  </div>
+</body>
+</html>
