@@ -1,0 +1,11 @@
+/* style.css - Online forest background */
+body {
+    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80'); /* Online forest image */
+    background-size: cover;              /* Make the image cover the entire page */
+    background-repeat: no-repeat;        /* Prevent repeating */
+    background-position: center center;  /* Center the image */
+    background-attachment: fixed;        /* Fixed on scroll */
+    font-family: Arial, Helvetica, sans-serif; /* Optional: modern font */
+    margin: 0;
+    padding: 0;
+}
