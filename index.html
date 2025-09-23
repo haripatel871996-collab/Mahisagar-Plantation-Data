@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plantation Data Entry</title>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent: #2f9e44;
+      --card-bg: rgba(255,255,255,0.95);
+      --glass: rgba(255,255,255,0.08);
+      --muted: #6b7280;
+      --radius: 12px;
+      --max-width: 1100px;
+    }
+    *{box-sizing:border-box;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    html,body{height:100%;margin:0;background:#071029;}
+    /* background image + overlay */
+    body{
+      background-image: url('forest.jpg'); /* replace with your image path on GitHub pages */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color:#0b1220;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    body:before{
+      content:"";
+      position:fixed;inset:0;
+      background:linear-gradient(180deg, rgba(5,10,15,0.55), rgba(5,10,15,0.55));
+      backdrop-filter: blur(4px);
+      z-index:0;
+    }
+
+    .page {
+      position:relative;
+      z-index:1;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:40px 18px;
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:28px;
+      align-items:start;
+    }
+
+    /* Left form card */
+    .card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+    }
+    h1{margin:0 0 8px;font-size:22px;}
+    p.lead{margin:0 0 16px;color:var(--muted);font-size:13px;}
+
+    label{display:block;font-size:13px;margin-top:10px;color:#23323b;font-weight:600}
+    input[type="text"], input[type="date"], input[type="number"], select, textarea {
+      width:100%;
+      padding:10px 12px;
+      margin-top:6px;
+      border-radius:8px;
+      border:1px solid #e7eaf0;
+      background:transparent;
+      font-size:14px;
+    }
+    textarea{min-height:80px;resize:vertical}
+
+    .row{display:flex;gap:10px}
+    .row .col{flex:1}
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+    }
+    button.btn{
+      padding:10px 14px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      font-size:14px;
+    }
+    button.primary{background:var(--accent); color:white}
+    button.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06);color:#102027}
+
+    .small {font-size:12px;color:var(--muted);margin-top:8px}
+
+    /* Right panel: table of entries */
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.92));
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:0 8px 30px rgba(2,6,23,0.35);
+      max-height:80vh;
+      overflow:auto;
+    }
+
+    .toolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      margin-bottom:12px;
+    }
+    .toolbar .right{display:flex;gap:8px;align-items:center}
+
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:10px 8px;border-bottom:1px solid #e9eef3;text-align:left}
+    th{font-weight:600;background:transparent;color:#24303a;position:sticky;top:0}
+    tr:hover td{background:rgba(30,40,50,0.02)}
+    .thumb{width:56px;height:40px;border-radius:6px;object-fit:cover;border:1px solid #e6eef6}
+    .muted{color:var(--muted);font-size:12px}
+
+    /* responsive */
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr; padding-bottom:40px}
+    }
+
+    /* small utility */
+    .tag{display:inline-block;padding:6px 8px;border-radius:8px;background:#f2fbf5;color:#1b5e20;font-weight:600;font-size:12px}
+    .icon-btn{background:transparent;border:0;padding:6px;border-radius:6px;cursor:pointer}
+    .linkish{background:transparent;border:0;color:var(--accent);cursor:pointer;text-decoration:underline;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+
+      <!-- Form Card -->
+      <div class="card" aria-labelledby="title">
+        <h1 id="title">Plantation Data Entry</h1>
+        <p class="lead">Enter planting records. These are stored locally in your browser (localStorage). Export to CSV when ready.</p>
+
+        <form id="entryForm" autocomplete="off" onsubmit="return false;">
+          <label>Date</label>
+          <input type="date" id="date" required>
+
+          <label>Range</label>
+          <select id="range" required>
+            <option value="">-- Select Range --</option>
+            <option>Lunawada</option>
+            <option>Khanpur</option>
+            <option>Balasinor</option>
+            <option>Santrampur (East)</option>
+            <option>Santrampur (West)</option>
+            <option>Munpur</option>
+            <option>Ditwas</option>
+          </select>
+
+          <label>Scheme</label>
+          <select id="scheme">
+            <option value="">-- Select Scheme --</option>
+            <option>Forest Mgmt & Dev (NT)</option>
+            <option>Social Forestry</option>
+            <option>Watershed Plantation</option>
+            <option>Community Plantation</option>
+            <option>Other</option>
+          </select>
+
+          <label>Species / Crop</label>
+          <input type="text" id="species" placeholder="e.g. Teak, Neem">
+
+          <div class="row">
+            <div class="col">
+              <label>Quantity (no. of saplings)</label>
+              <input type="number" id="quantity" min="0" placeholder="e.g. 100">
+            </div>
+            <div class="col">
+              <label>Survival % (optional)</label>
+              <input type="number" id="survival" min="0" max="100" placeholder="e.g. 85">
+            </div>
+          </div>
+
+          <label>Location / GPS</label>
+          <input type="text" id="location" placeholder="Village / Grid / GPS coordinates">
+
+          <label>Notes</label>
+          <textarea id="notes" placeholder="Any observations..."></textarea>
+
+          <label>Photo (optional)</label>
+          <input type="file" id="photo" accept="image/*">
+          <div class="small muted">Image will be saved locally as a thumbnail.</div>
+
+          <div class="actions">
+            <button class="btn primary" id="saveBtn">Save Entry</button>
+            <button class="btn ghost" id="resetBtn" type="button">Clear Form</button>
+            <div style="flex:1"></div>
+            <button class="btn" id="exportCSV" type="button">Export CSV</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Records Panel -->
+      <div class="panel">
+        <div class="toolbar">
+          <div>
+            <strong>Saved Records</strong>
+            <div class="muted">Entries are stored locally in this browser</div>
+          </div>
+          <div class="right">
+            <button class="linkish" id="clearAll">Clear All</button>
+          </div>
+        </div>
+
+        <div style="overflow:auto">
+          <table id="recordsTable" aria-live="polite">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Range</th>
+                <th>Scheme</th>
+                <th>Species</th>
+                <th>Qty</th>
+                <th>Location</th>
+                <th>Photo</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Simple plantation data manager using localStorage
+    const LS_KEY = 'plantation_records_v1';
+
+    // DOM
+    const form = document.getElementById('entryForm');
+    const saveBtn = document.getElementById('saveBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const exportBtn = document.getElementById('exportCSV');
+    const clearAllBtn = document.getElementById('clearAll');
+    const photoInput = document.getElementById('photo');
+    const tableBody = document.querySelector('#recordsTable tbody');
+
+    let records = [];
+    let editingId = null;
+
+    // load
+    function loadRecords(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        records = raw ? JSON.parse(raw) : [];
+      }catch(e){
+        records = [];
+      }
+      renderTable();
+    }
+
+    function saveToStorage(){
+      localStorage.setItem(LS_KEY, JSON.stringify(records));
+    }
+
+    // helper to read form fields
+    async function readForm(){
+      const date = document.getElementById('date').value;
+      const range = document.getElementById('range').value.trim();
+      const scheme = document.getElementById('scheme').value.trim();
+      const species = document.getElementById('species').value.trim();
+      const quantity = Number(document.getElementById('quantity').value || 0);
+      const survival = Number(document.getElementById('survival').value || 0);
+      const location = document.getElementById('location').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+
+      // photo read as data URL (thumbnail)
+      let photoData = null;
+      if(photoInput.files && photoInput.files[0]){
+        photoData = await fileToDataURL(photoInput.files[0], 800);
+      }
+
+      return { date, range, scheme, species, quantity, survival, location, notes, photoData };
+    }
+
+    // convert image to data URL, optionally resize (basic)
+    function fileToDataURL(file, maxSide=800){
+      return new Promise((resolve)=>{
+        const reader = new FileReader();
+        reader.onload = function(e){
+          // quickly downscale using canvas for large images
+          const img = new Image();
+          img.onload = function(){
+            let w = img.width, h = img.height;
+            const scale = Math.min(1, maxSide / Math.max(w,h));
+            w = Math.round(w*scale); h = Math.round(h*scale);
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img,0,0,w,h);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          };
+          img.onerror = ()=> resolve(e.target.result);
+          img.src = e.target.result;
+        };
+        reader.onerror = ()=> resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // add or update
+    saveBtn.addEventListener('click', async (ev)=>{
+      ev.preventDefault();
+      const data = await readForm();
+
+      if(!data.date || !data.range){
+        alert('Please fill required fields: Date & Range');
+        return;
+      }
+
+      if(editingId){
+        // update
+        const idx = records.findIndex(r=>r.id === editingId);
+        if(idx>-1){
+          records[idx] = {...records[idx], ...data, updatedAt: Date.now()};
+        }
+        editingId = null;
+      } else {
+        const id = 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+        records.unshift({...data, id, createdAt: Date.now()});
+      }
+
+      saveToStorage();
+      renderTable();
+      form.reset();
+      photoInput.value = '';
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    // reset form
+    resetBtn.addEventListener('click', ()=>{ form.reset(); editingId=null; photoInput.value=''; });
+
+    // export CSV
+    exportBtn.addEventListener('click', ()=>{
+      if(!records.length){ alert('No records to export'); return; }
+      const csv = toCSV(records);
+      downloadBlob(csv, 'plantation_records.csv','text/csv;charset=utf-8;');
+    });
+
+    // clear all
+    clearAllBtn.addEventListener('click', ()=>{
+      if(!confirm('Clear all saved records? This cannot be undone.')) return;
+      records = [];
+      saveToStorage();
+      renderTable();
+    });
+
+    // render table
+    function renderTable(){
+      tableBody.innerHTML = '';
+      if(!records.length){
+        tableBody.innerHTML = '<tr><td colspan="8" class="muted">No records yet — add a new entry on the left.</td></tr>';
+        return;
+      }
+
+      records.forEach(rec=>{
+        const tr = document.createElement('tr');
+
+        const tdDate = document.createElement('td'); tdDate.textContent = rec.date || '';
+        const tdRange = document.createElement('td'); tdRange.textContent = rec.range || '';
+        const tdScheme = document.createElement('td'); tdScheme.textContent = rec.scheme || '';
+        const tdSpecies = document.createElement('td'); tdSpecies.textContent = rec.species || '';
+        const tdQty = document.createElement('td'); tdQty.textContent = rec.quantity || '';
+        const tdLoc = document.createElement('td'); tdLoc.textContent = rec.location || '';
+
+        const tdPhoto = document.createElement('td');
+        if(rec.photoData){
+          const img = document.createElement('img');
+          img.src = rec.photoData;
+          img.className = 'thumb';
+          img.alt = 'photo';
+          tdPhoto.appendChild(img);
+        } else {
+          tdPhoto.innerHTML = '<span class="muted">—</span>';
+        }
+
+        const tdAct = document.createElement('td');
+        // edit button
+        const editBtn = document.createElement('button');
+        editBtn.className='icon-btn';
+        editBtn.title='Edit';
+        editBtn.innerHTML = '✏️';
+        editBtn.onclick = ()=> loadIntoForm(rec.id);
+
+        // delete button
+        const delBtn = document.createElement('button');
+        delBtn.className='icon-btn';
+        delBtn.title='Delete';
+        delBtn.innerHTML = '🗑️';
+        delBtn.onclick = ()=> {
+          if(!confirm('Delete this record?')) return;
+          records = records.filter(r=>r.id !== rec.id);
+          saveToStorage();
+          renderTable();
+        };
+
+        tdAct.appendChild(editBtn); tdAct.appendChild(delBtn);
+
+        tr.appendChild(tdDate);
+        tr.appendChild(tdRange);
+        tr.appendChild(tdScheme);
+        tr.appendChild(tdSpecies);
+        tr.appendChild(tdQty);
+        tr.appendChild(tdLoc);
+        tr.appendChild(tdPhoto);
+        tr.appendChild(tdAct);
+
+        tableBody.appendChild(tr);
+      });
+    }
+
+    // load to form for editing
+    function loadIntoForm(id){
+      const rec = records.find(r=>r.id===id);
+      if(!rec) return;
+      document.getElementById('date').value = rec.date || '';
+      document.getElementById('range').value = rec.range || '';
+      document.getElementById('scheme').value = rec.scheme || '';
+      document.getElementById('species').value = rec.species || '';
+      document.getElementById('quantity').value = rec.quantity || '';
+      document.getElementById('survival').value = rec.survival || '';
+      document.getElementById('location').value = rec.location || '';
+      document.getElementById('notes').value = rec.notes || '';
+      // note: photo input cannot be programmatically set for security; keep existing photo
+      editingId = id;
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // CSV helpers
+    function toCSV(arr){
+      // flatten, remove images for CSV or include image as data URL optionally
+      const header = ['date','range','scheme','species','quantity','survival','location','notes','photoData'];
+      const lines = [header.join(',')];
+      arr.slice().reverse().forEach(r=>{
+        const row = header.map(k=>{
+          let v = r[k] ?? '';
+          // escape quotes and newlines
+          if(typeof v === 'string'){
+            v = v.replace(/"/g,'""').replace(/\n/g,' ');
+            // if photoData too large, omit it for CSV to keep size small
+            if(k === 'photoData' && v.length>300) return '';
+            return `"${v}"`;
+          }
+          return v;
+        });
+        lines.push(row.join(','));
+      });
+      return lines.join('\n');
+    }
+
+    function downloadBlob(text, filename, mime){
+      const blob = new Blob([text], {type: mime});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // init
+    loadRecords();
+
+    // convenience: autos-set today's date
+    (function setToday(){
+      const d = new Date();
+      const iso = d.toISOString().slice(0,10);
+      document.getElementById('date').value = iso;
+    })();
+
+  </script>
+</body>
+</html>
